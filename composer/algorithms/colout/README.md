@@ -17,6 +17,8 @@ This modification modestly reduces accuracy, but it is a worthwhile tradeoff for
 ### Functional Interface
 
 ```python
+import torch
+
 from composer.algorithms.colout import colout_batch
 
 def training_loop(model, train_loader):
@@ -79,7 +81,7 @@ We found that setting `p_row = 0.15` and `p_col = 0.15` strike a good balance be
 ## Technical Details
 
 ColOut reduces the size of images, reducing the number of operations per training step and consequently the total time to train the network.
-The variability induced by randomly dropping rows and columns can negatively affect generalization performance. In our testing, we saw a decrease in accuracy of ~0.2% in some models on ImageNet and a decrease in accuracy of ~1% on CIFAR-10.
+The variability and size reduction induced by randomly dropping rows and columns can negatively affect generalization performance. In our testing, we saw a decrease in accuracy of ~0.2% in some models on ImageNet and a decrease in accuracy of ~1% on CIFAR-10.
 
 > 🚧 Quality/Speed Tradeoff
 >
