@@ -16,16 +16,17 @@ This modification modestly reduces accuracy, but it is a worthwhile tradeoff for
 
 ### Functional Interface
 
-TODO(CORY): FIX
-
 ```python
+from composer.algorithms.colout import colout_batch
+
 def training_loop(model, train_loader):
   opt = torch.optim.Adam(model.parameters())
   loss_fn = F.cross_entropy
   model.train()
-  
+
   for epoch in range(num_epochs):
       for X, y in train_loader:
+          X = colout_batch(X=X, p_row=0.15, p_col=0.15)
           y_hat = model(X)
           loss = loss_fn(y_hat, y)
           loss.backward()
@@ -35,17 +36,32 @@ def training_loop(model, train_loader):
 
 ### Composer Trainer
 
-TODO(CORY): Fix and provide commentary and/or comments
+To use the batched version of ColOut:
 
 ```python
-from composer.algorithms import XXX
+from composer.algorithms import ColOut
 from composer.trainer import Trainer
 
+colout_algorithm = ColOut(p_row=0.15, p_col=0.15, batch=True)
 trainer = Trainer(model=model,
                   train_dataloader=train_dataloader,
                   max_duration='1ep',
-                  algorithms=[
-                  ])
+                  algorithms=[colout_algorithm])
+
+trainer.fit()
+```
+
+To use ColOut as an additional data augmentation within the dataloader:
+
+```python
+from composer.algorithms import ColOut
+from composer.trainer import Trainer
+
+colout_algorithm = ColOut(p_row=0.15, p_col=0.15, batch=False)
+trainer = Trainer(model=model,
+                  train_dataloader=train_dataloader,
+                  max_duration='1ep',
+                  algorithms=[colout_algorithm])
 
 trainer.fit()
 ```
@@ -66,7 +82,7 @@ ColOut reduces the size of images, reducing the number of operations per trainin
 The variability induced by randomly dropping rows and columns can negatively affect generalization performance. In our testing, we saw a decrease in accuracy of ~0.2% in some models on ImageNet and a decrease in accuracy of ~1% on CIFAR-10.
 
 > 🚧 Quality/Speed Tradeoff
-> 
+>
 > In our experiments, ColOut presents a tradeoff in that it increases training speed at the cost of lower model quality.
 > On ResNet-50 on ImageNet and ResNet-56 on CIFAR-10, we found this tradeoff to be worthwhile: it is a pareto improvement over the standard versions of those benchmarks.
 > We also found it to be worthwhile in composition with other methods.
@@ -78,7 +94,7 @@ A second implementation runs immediately before the training example is provided
 The GPU-based, batch-wise implementation suffers a drop in validation accuracy compared to the CPU-based example-wise implementation (0.2% on CIFAR-10 and 0.1% on ImageNet)
 
 > 🚧 CPU/GPU Tradeoff
-> 
+>
 > If the workload is CPU heavy, it may make sense to run ColOut batch-wise on GPU so that it does not bottleneck training on the CPU. If the workload is GPU-bottlenecked, it will make sense to run ColOut sample-wise on the CPU, avoiding the accuracy reduction of running it batch-wise and improving GPU throughput.
 
 ColOut will show diminishing returns when composed with other methods that change the size of images, such as Progressive Resizing and Selective Backdrop with downsampling. In addition, to the extent that ColOut serves as a form of regularization, combining regularization-based methods can lead to sublinear improvements in accuracy.
