@@ -15,16 +15,19 @@ It is a regularization technique that improves the generalization accuracy of mo
 
 ### Functional Interface
 
-TODO(CORY): FIX
-
 ```python
+import torch
+
+from composer.algorithms.cutmix import cutmix_batch
+
 def training_loop(model, train_loader):
   opt = torch.optim.Adam(model.parameters())
   loss_fn = F.cross_entropy
   model.train()
-  
+
   for epoch in range(num_epochs):
       for X, y in train_loader:
+          X, y = cutmix_batch(X=X, y=y, n_classes=1000, alpha=1.0)
           y_hat = model(X)
           loss = loss_fn(y_hat, y)
           loss.backward()
@@ -34,24 +37,24 @@ def training_loop(model, train_loader):
 
 ### Composer Trainer
 
-TODO(CORY): Fix and provide commentary and/or comments
-
 ```python
-from composer.algorithms import XXX
+from composer.algorithms import CutMix
 from composer.trainer import Trainer
 
+cutmix_algorithm = CutMix(num_classes=1000, alpha=1.0)
 trainer = Trainer(model=model,
                   train_dataloader=train_dataloader,
                   max_duration='1ep',
-                  algorithms=[
-                  ])
+                  algorithms=[cutmix_algorithm])
 
 trainer.fit()
 ```
 
 ### Implementation Details
 
-TODO(CORY): Briefly describe how this is implemented under the hood in Composer. Need to explain the mask in particular, since it shows up a few times below.
+CutMix is implemented following the [original paper](1905.04899). This means CutMix runs immediately before the training example is provided to the model, and on the GPU if one is being used.
+
+The construction of the bounding box for the mixed region follows the [paper's implementation](https://github.com/clovaai/CutMix-PyTorch) which selects the top left pixel of the bounding box uniformly at random from all locations in the image, and clips the bounding box to fit. This implies that the size of the region mixed by CutMix is not always square, and the area is not directly drawn from a beta distribution. It also implies that regions in the bottom right of the image are more likely to be selected than those in the top left.
 
 ## Suggested Hyperparameters
 
