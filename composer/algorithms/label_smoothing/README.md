@@ -14,17 +14,20 @@ Label smoothing modifies the target distribution for a task by interpolating bet
 
 ### Functional Interface
 
-TODO(CORY): FIX
-
 ```python
+import torch
+
+from composer.algorithms.label_smoothing import smooth_labels
+
 def training_loop(model, train_loader):
   opt = torch.optim.Adam(model.parameters())
   loss_fn = F.cross_entropy
   model.train()
-  
+
   for epoch in range(num_epochs):
       for X, y in train_loader:
           y_hat = model(X)
+          y = smooth_labels(logits=y_hat, targets=y, alpha=0.1)
           loss = loss_fn(y_hat, y)
           loss.backward()
           opt.step()
@@ -33,24 +36,22 @@ def training_loop(model, train_loader):
 
 ### Composer Trainer
 
-TODO(CORY): Fix and provide commentary and/or comments
-
 ```python
-from composer.algorithms import XXX
+from composer.algorithms import LabelSmoothing
 from composer.trainer import Trainer
 
+label_smoothing_algorithm = LabelSmoothing(alpha=0.1)
 trainer = Trainer(model=model,
                   train_dataloader=train_dataloader,
                   max_duration='1ep',
-                  algorithms=[
-                  ])
+                  algorithms=[label_smoothing_algorithm])
 
 trainer.fit()
 ```
 
 ### Implementation Details
 
-TODO(CORY): Briefly describe how this is implemented under the hood in Composer.
+This implementation of label smoothing does a direct smoothing of the target labels. As a result, the output is a distribution over class labels. This differs from many other implementations of label smoothing which add a smoothing term directly to the loss function. The benefit of using the distribution is that this label smoothing can be used with other cost functions besides cross entropy, and can be composed with other algorithms that modify the labels. The downside is that the cost function must accept a distribution over labels.
 
 ## Suggested Hyperparameters
 
