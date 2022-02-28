@@ -54,7 +54,7 @@ trainer.fit()
 
 CutMix is implemented following the [original paper](1905.04899). This means CutMix runs immediately before the training example is provided to the model, and on the GPU if one is being used.
 
-The construction of the bounding box for the mixed region follows the [paper's implementation](https://github.com/clovaai/CutMix-PyTorch) which selects the top left pixel of the bounding box uniformly at random from all locations in the image, and clips the bounding box to fit. This implies that the size of the region mixed by CutMix is not always square, and the area is not directly drawn from a beta distribution. It also implies that regions in the bottom right of the image are more likely to be selected than those in the top left.
+The construction of the bounding box for the mixed region follows the [paper's implementation](https://github.com/clovaai/CutMix-PyTorch) which selects the center pixel of the bounding box uniformly at random from all locations in the image, and clips the bounding box to fit. This implies that the size of the region mixed by CutMix is not always square, and the area is not directly drawn from a beta distribution. It also implies that not all regions are equally likely to lie inside the bounding box.
 
 ## Suggested Hyperparameters
 
