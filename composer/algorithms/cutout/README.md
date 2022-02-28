@@ -15,16 +15,19 @@ It is a regularization technique that improves the accuracy of models for comput
 
 ### Functional Interface
 
-TODO(CORY): FIX
-
 ```python
+import torch
+
+from composer.algorithms.cutout import cutout_batch
+
 def training_loop(model, train_loader):
   opt = torch.optim.Adam(model.parameters())
   loss_fn = F.cross_entropy
   model.train()
-  
+
   for epoch in range(num_epochs):
       for X, y in train_loader:
+          X = cutout_batch(X=X, n_holes=1, length=0.5)
           y_hat = model(X)
           loss = loss_fn(y_hat, y)
           loss.backward()
@@ -34,17 +37,15 @@ def training_loop(model, train_loader):
 
 ### Composer Trainer
 
-TODO(CORY): Fix and provide commentary and/or comments
-
 ```python
-from composer.algorithms import XXX
+from composer.algorithms import CutOut
 from composer.trainer import Trainer
 
+cutout_algorithm = CutOut(n_holes=1, length=0.25)
 trainer = Trainer(model=model,
                   train_dataloader=train_dataloader,
                   max_duration='1ep',
-                  algorithms=[
-                  ])
+                  algorithms=[cutout_algorithm])
 
 trainer.fit()
 ```
