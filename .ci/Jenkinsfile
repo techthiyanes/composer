@@ -153,7 +153,7 @@ stage('Prepare') {
 
         def getDockerBuildMatrix = load "$jenkinsfileWorkspace/utils/getDockerBuildMatrix.groovy"
 
-        isPathModified = load "$jenkinsfileWorkspace/utils/isPathModified.groovy"
+        isPathModified = load "$jenkinsfileWorkspace/utils/isPathModified2.groovy"
 
         if (isPathModified("docker/pytorch/")) {
             def shouldPush = gitBranch == "dev" || gitBranch == "main"
