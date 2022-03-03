@@ -2,7 +2,9 @@
 
 from composer.datasets.ade20k import ADE20kDatasetHparams
 from composer.datasets.brats import BratsDatasetHparams
+from composer.datasets.c4 import C4DatasetHparams
 from composer.datasets.cifar10 import CIFAR10DatasetHparams
+from composer.datasets.coco import COCODatasetHparams
 from composer.datasets.glue import GLUEHparams
 from composer.datasets.imagenet import ImagenetDatasetHparams
 from composer.datasets.lm_datasets import LMDatasetHparams
@@ -17,7 +19,9 @@ registry = {
     "mnist": MNISTDatasetHparams,
     "lm": LMDatasetHparams,
     "streaming_lm": StreamingLMDatasetHparams,
-    "glue": GLUEHparams
+    "glue": GLUEHparams,
+    "coco": COCODatasetHparams,
+    "c4": C4DatasetHparams,
 }
 
 
