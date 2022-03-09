@@ -22,7 +22,7 @@ model:
   gpt2:
     use_pretrained: false
     tokenizer_name: gpt2
-    activation_checkpointing: false
+    gradient_checkpointing: false
     model_config:
       n_embd: 768
       n_head: 12
