@@ -27,12 +27,13 @@ from composer.models import (BERTForClassificationHparams, BERTHparams, CIFARRes
                              DeepLabV3Hparams, EfficientNetB0Hparams, GPT2Hparams, MnistClassifierHparams, ModelHparams,
                              ResNetHparams, SSDHparams, TimmHparams, UnetHparams, ViTSmallPatch16Hparams)
 from composer.models.resnet20_cifar10.resnet20_cifar10_hparams import CIFARResNet20Hparams
-from composer.optim import (AdamHparams, AdamWHparams, ConstantSchedulerHparams, CosineAnnealingSchedulerHparams,
-                            CosineAnnealingWarmRestartsSchedulerHparams, CosineAnnealingWithWarmupSchedulerHparams,
-                            DecoupledAdamWHparams, DecoupledSGDWHparams, ExponentialSchedulerHparams,
-                            LinearSchedulerHparams, LinearWithWarmupSchedulerHparams, MultiStepSchedulerHparams,
-                            MultiStepWithWarmupSchedulerHparams, OptimizerHparams, PolynomialSchedulerHparams,
-                            RAdamHparams, RMSpropHparams, SchedulerHparams, SGDHparams, StepSchedulerHparams)
+from composer.optim import (AdamHparams, AdamWHparams, ConstantSchedulerHparams, ConstantWithWarmupSchedulerHparams,
+                            CosineAnnealingSchedulerHparams, CosineAnnealingWarmRestartsSchedulerHparams,
+                            CosineAnnealingWithWarmupSchedulerHparams, DecoupledAdamWHparams, DecoupledSGDWHparams,
+                            ExponentialSchedulerHparams, LinearSchedulerHparams, LinearWithWarmupSchedulerHparams,
+                            MultiStepSchedulerHparams, MultiStepWithWarmupSchedulerHparams, OptimizerHparams,
+                            PolynomialSchedulerHparams, RAdamHparams, RMSpropHparams, SchedulerHparams, SGDHparams,
+                            StepSchedulerHparams)
 from composer.profiler.profiler_hparams import JSONTraceHandlerHparams, ProfilerEventHandlerHparams
 from composer.trainer.ddp import DDPSyncStrategy
 from composer.trainer.devices import CPUDeviceHparams, DeviceHparams, GPUDeviceHparams
@@ -64,6 +65,7 @@ scheduler_registry = {
     "cosine_warmrestart": CosineAnnealingWarmRestartsSchedulerHparams,
     "constant": ConstantSchedulerHparams,
     "polynomial": PolynomialSchedulerHparams,
+    "constant_with_warmup": ConstantWithWarmupSchedulerHparams,
     "multistep_with_warmup": MultiStepWithWarmupSchedulerHparams,
     "linear_decay_with_warmup": LinearWithWarmupSchedulerHparams,
     "cosine_decay_with_warmup": CosineAnnealingWithWarmupSchedulerHparams,
