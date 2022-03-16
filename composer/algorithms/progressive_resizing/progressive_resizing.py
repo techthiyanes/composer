@@ -106,6 +106,7 @@ def resize_batch(input: torch.Tensor,
     log.info(
         textwrap.dedent(f"""\
             Applied Progressive Resizing with scale_factor={scale_factor} and mode={mode}.
+            Bilinear interpolation.
             Old input dimensions: (H,W)={input.shape[2], input.shape[3]}.
             New input dimensions: (H,W)={X_sized.shape[2], X_sized.shape[2]}"""))
     return X_sized, y_sized
