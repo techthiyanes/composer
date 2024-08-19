@@ -83,7 +83,7 @@ install_requires = [
     'torchvision>=0.13.1,<0.18.1',
     'torch>=2.1.2,<2.3.1',
     'requests>=2.26.0,<3',
-    'numpy>=1.21.5,<1.27.0',
+    'numpy>=1.21.5,<2.2.0',
     'psutil>=5.8.0,<6',
     'coolname>=1.1.0,<3',
     'tabulate==0.9.0',  # for auto-generating tables
